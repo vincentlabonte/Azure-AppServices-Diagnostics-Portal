@@ -101,10 +101,12 @@ export class DetectorViewComponent implements OnInit {
   protected loadDetector() {
     this.detectorResponseSubject.subscribe((data: DetectorResponse) => {
       let metadata: DetectorMetaData = data? data.metadata: null;
-      if (metadata && (metadata.type == DetectorType.Analysis)){
-        data.dataset = data.dataset.filter((ds: DiagnosticData) => (ds.renderingProperties.type !== RenderingType.SearchComponent));
-      }
       this.detectorDataLocalCopy = data;
+      if (metadata && (metadata.type == DetectorType.Analysis) && this.isAnalysisView){
+        // Create a copy of the cached response because we are modifying it
+        this.detectorDataLocalCopy = JSON.parse(JSON.stringify(data));
+        this.detectorDataLocalCopy.dataset = this.detectorDataLocalCopy.dataset.filter((ds: DiagnosticData) => (ds.renderingProperties.type !== RenderingType.SearchComponent));
+      }
       if (data) {
         this.detectorEventProperties = {
           'StartTime': String(this.startTime),
