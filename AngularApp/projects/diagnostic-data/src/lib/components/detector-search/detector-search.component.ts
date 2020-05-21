@@ -38,9 +38,9 @@ import { GenericResourceService } from '../../services/generic-resource-service'
     ]
 })
 export class DetectorSearchComponent extends DataRenderBaseComponent implements OnInit {
-    @ViewChild ('charAlertRef') charAlertRef: ElementRef;
-    @ViewChild ('searchInputBox') searchInputBox: ElementRef;
-    @ViewChild ('searchResultsSection') searchResultsSection: ElementRef;
+    @ViewChild ('charAlertRef', {static: false}) charAlertRef: ElementRef;
+    @ViewChild ('searchInputBox', {static: false}) searchInputBox: ElementRef;
+    @ViewChild ('searchResultsSection', {static: false}) searchResultsSection: ElementRef;
     detectorSearchEnabledPesIds: string[] = ["14748", "16072", "16170"];
     startTime: Moment;
     endTime: Moment;
@@ -216,7 +216,7 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
         }));
         this.showPreLoader = true;
         observableForkJoin([searchTask, detectorsTask, childrenTask]).subscribe(results => {
-            this.searchResultsSection.nativeElement.click();
+            setTimeout(() => {this.searchResultsSection.nativeElement.click();}, 2000);
             this.showPreLoader = false;
             var searchResults: DetectorMetaData[] = results[0];
             this.logEvent(TelemetryEventNames.SearchQueryResults, { parentDetectorId: this.detector, searchId: this.searchId, query: this.searchTerm, results: JSON.stringify(searchResults.map((det: DetectorMetaData) => new Object({ id: det.id, score: det.score }))), ts: Math.floor((new Date()).getTime() / 1000).toString() });
