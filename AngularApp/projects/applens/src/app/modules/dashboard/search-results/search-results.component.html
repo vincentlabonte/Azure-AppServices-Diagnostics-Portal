@@ -1,11 +1,16 @@
-<div *ngIf="!_searchService.searchIsEnabled" class="outer-container">
-  <div class="alert-container">
-    <comm-alert></comm-alert>
+<div>
+  <div class="btn-container">
+    <button class="btn back-button" (click)="navigateBack()">&lt; Back</button>
   </div>
-  <div class="search-disabled-message">
-    <span>Search feature is not enabled for you.</span>
+  <div *ngIf="!_searchService.searchIsEnabled" class="outer-container">
+    <div class="alert-container">
+      <comm-alert></comm-alert>
+    </div>
+    <div class="search-disabled-message">
+      <span>Search feature is not enabled for you.</span>
+    </div>
   </div>
-</div>
-<div *ngIf="_searchService.searchIsEnabled" class="outer-container">
-  <detector-search [visibleLogging]="false" [showSearchBar]="false" [forceShowSearchPractices]="true"></detector-search>
+  <div *ngIf="_searchService.searchIsEnabled" class="outer-container">
+    <detector-search [visibleLogging]="false" [showSearchBar]="false" [forceShowSearchPractices]="true"></detector-search>
+  </div>
 </div>
