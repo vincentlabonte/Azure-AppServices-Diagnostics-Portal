@@ -10,4 +10,8 @@ export class WebHostingEnvironmentsService extends ResourceService {
     public get azureServiceName(): string {
         return "ASE";
     }
+    
+    public getPesId(): Observable<string> {
+        return of("16533");
+    }
 }
