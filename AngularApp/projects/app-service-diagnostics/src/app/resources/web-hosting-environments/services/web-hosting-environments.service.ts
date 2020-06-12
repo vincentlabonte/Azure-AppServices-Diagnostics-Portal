@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ResourceService } from '../../../shared-v2/services/resource.service';
+import {of, Observable} from "rxjs";
 
 @Injectable()
 export class WebHostingEnvironmentsService extends ResourceService {
