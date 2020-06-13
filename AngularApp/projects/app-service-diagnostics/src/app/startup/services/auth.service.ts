@@ -55,7 +55,7 @@ export class AuthService {
             try{
                 var token = jwt_decode(this.currentToken);
                 var currentTime = (new Date().getTime())/1000;
-                var refreshInterval = token.exp - currentTime - 60;
+                var refreshInterval = token.exp - currentTime + 5;
                 // Keeping this console log for tracking during debugging purposes
                 console.log("Scheduling token refresh - ", " current time: ", currentTime, " refreshes in: ", refreshInterval);
                 if (refreshInterval <= 0) {
