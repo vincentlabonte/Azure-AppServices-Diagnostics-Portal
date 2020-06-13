@@ -5,6 +5,7 @@ import { StartupInfo, ResourceType } from '../../shared/models/portal';
 import { PortalService } from './portal.service';
 import { map } from 'rxjs/operators';
 import { environment } from 'projects/app-service-diagnostics/src/environments/environment';
+import * as jwt_decode from "jwt-decode";
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,10 @@ export class AuthService {
 
     constructor(private _http: HttpClient, private _portalService: PortalService) {
         this.inIFrame = window.parent !== window;
+        this._portalService.getToken().subscribe(token => {
+            this.setAuthToken(token);
+        });
+        this.scheduleNextRefresh();
     }
 
     getAuthToken(): string {
@@ -36,12 +41,48 @@ export class AuthService {
 
     setAuthToken(value: string): void {
         this.currentToken = value;
+        this.scheduleNextRefresh();
     }
 
     setStartupInfo(token: string, resourceId: string) {
         this.localStartUpInfo.token = token;
         this.localStartUpInfo.resourceId = resourceId;
         this.currentToken = token;
+    }
+
+    scheduleNextRefresh(retryOnFailure=true) {
+        if (this.currentToken) {
+            try{
+                var token = jwt_decode(this.currentToken);
+                var currentTime = (new Date().getTime())/1000;
+                var refreshInterval = token.exp - currentTime - 60;
+                // Keeping this console log for tracking during debugging purposes
+                console.log("Scheduling token refresh - ", " current time: ", currentTime, " refreshes in: ", refreshInterval);
+                if (refreshInterval <= 0) {
+                    this.refreshToken();
+                }
+                else{
+                    setTimeout(() => {
+                        this.refreshToken();
+                    }, refreshInterval*1000);
+                }
+            }
+            catch(Error){
+                return;
+            }
+        }
+        else{
+            // Token not present, will try scheduling in next 10 seconds
+            setTimeout(() => {
+                this.scheduleNextRefresh();
+            }, 10000);
+        }
+    }
+
+    refreshToken() {
+        if (this.inIFrame) {
+            this._portalService.refreshToken();
+        }
     }
 
     getStartupInfo(): Observable<StartupInfo> {
@@ -61,7 +102,7 @@ export class AuthService {
                     info.resourceId = info.resourceId.toLowerCase();
 
                     this.currentToken = info.token;
-
+                    
                     if (!this.resourceType) {
                         this.resourceType = info.resourceId.toLowerCase().indexOf('hostingenvironments') > 0 ? ResourceType.HostingEnvironment : ResourceType.Site;
                     }

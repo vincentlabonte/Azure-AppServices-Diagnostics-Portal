@@ -19,11 +19,14 @@ export class PortalService {
 
 
     private shellSrc: string;
+    private willRefreshToken: boolean = false;
+    private tokenObservable: ReplaySubject<string>;
 
     constructor(private _broadcastService: BroadcastService) {
         this.sessionId = '';
 
         this.startupInfoObservable = new ReplaySubject<StartupInfo>(1);
+        this.tokenObservable = new ReplaySubject<string>(1);
         this.appInsightsResourceObservable = new ReplaySubject<any>(1);
         
         //CXP Chat messages
@@ -38,6 +41,10 @@ export class PortalService {
 
     getStartupInfo(): ReplaySubject<StartupInfo> {
         return this.startupInfoObservable;
+    }
+
+    getToken(): ReplaySubject<string> {
+        return this.tokenObservable;
     }
 
     getAppInsightsResourceInfo(): ReplaySubject<any> {
@@ -58,6 +65,11 @@ export class PortalService {
 
     notifyChatOpened():ReplaySubject<any> {
         return this.notifyChatOpenedObservable;
+    }
+
+    refreshToken(): void {
+        this.willRefreshToken = true;
+        this.postMessage(Verbs.getStartupInfo, null);
     }
 
     initializeIframe(): void {
@@ -133,6 +145,12 @@ export class PortalService {
         console.log('[iFrame] Received mesg: ' + methodName, event);
 
         if (methodName === Verbs.sendStartupInfo) {
+            if (this.willRefreshToken){
+                const info = <StartupInfo>data;
+                this.tokenObservable.next(info.token);
+                this.willRefreshToken = false;
+                return;
+            }
             const info = <StartupInfo>data;
             this.sessionId = info.sessionId;
             this.startupInfoObservable.next(info);
