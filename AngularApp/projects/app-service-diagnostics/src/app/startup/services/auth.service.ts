@@ -5,7 +5,6 @@ import { StartupInfo, ResourceType } from '../../shared/models/portal';
 import { PortalService } from './portal.service';
 import { map } from 'rxjs/operators';
 import { environment } from 'projects/app-service-diagnostics/src/environments/environment';
-import * as jwt_decode from "jwt-decode";
 
 @Injectable()
 export class AuthService {
