@@ -19,7 +19,6 @@ export class PortalService {
 
 
     private shellSrc: string;
-    private willRefreshToken: boolean = false;
     private tokenObservable: ReplaySubject<string>;
 
     constructor(private _broadcastService: BroadcastService) {
@@ -65,11 +64,6 @@ export class PortalService {
 
     notifyChatOpened():ReplaySubject<any> {
         return this.notifyChatOpenedObservable;
-    }
-
-    refreshToken(): void {
-        this.willRefreshToken = true;
-        this.postMessage(Verbs.getStartupInfo, null);
     }
 
     initializeIframe(): void {
@@ -145,12 +139,6 @@ export class PortalService {
         console.log('[iFrame] Received mesg: ' + methodName, event);
 
         if (methodName === Verbs.sendStartupInfo) {
-            if (this.willRefreshToken){
-                const info = <StartupInfo>data;
-                this.tokenObservable.next(info.token);
-                this.willRefreshToken = false;
-                return;
-            }
             const info = <StartupInfo>data;
             this.sessionId = info.sessionId;
             this.startupInfoObservable.next(info);
@@ -169,6 +157,9 @@ export class PortalService {
         } else if (methodName == Verbs.notifyChatOpenedResponse) {
             const notifyChatOpenedResponse = data;
             this.notifyChatOpenedObservable.next(notifyChatOpenedResponse);
+        } else if (methodName == Verbs.sendToken) {
+            const token = data;
+            this.tokenObservable.next(token);            
         }
     }
 
