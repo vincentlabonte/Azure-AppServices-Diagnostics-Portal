@@ -96,7 +96,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
     showWebSearchTimeout: any = null;
     searchDiagnosticData: DiagnosticData;
     readonly stringFormat: string = 'YYYY-MM-DDTHH:mm';
-    inDrillDownMode:boolean = false;
+    public inDrillDownMode:boolean = false;
     drillDownDetectorId:string = '';
 
     constructor(public _activatedRoute: ActivatedRoute, private _router: Router,
@@ -278,6 +278,9 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                                 this.searchTerm = qParams.get('searchTerm') === null ? this.searchTerm : qParams.get('searchTerm');this.showAppInsightsSection = false;
                                 if (this.searchTerm && this.searchTerm.length > 1) {
                                     this.isDynamicAnalysis = true;
+                                    if(this.detectorId) {
+                                        this.updateDrillDownMode(true, null);
+                                    }                                    
                                     this.showSuccessfulChecks = false;
                                     this.renderInsightsFromSearch(currDowntime);
                                 }
