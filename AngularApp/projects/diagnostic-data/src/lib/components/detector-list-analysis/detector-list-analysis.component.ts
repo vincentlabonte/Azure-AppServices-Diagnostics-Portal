@@ -266,7 +266,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
             this._activatedRoute.paramMap.subscribe(params => {
                 this.analysisId = (this.analysisId != 'searchResultsAnalysis' && !!params.get('analysisId'))? params.get('analysisId') : this.analysisId;
                 this.detectorId = params.get(this.detectorParmName) === null ? "" : params.get(this.detectorParmName);
-                this.goBackToAnalysis();
+                if (this.analysisId != 'searchResultsAnalysis') this.goBackToAnalysis();
                 this.populateSupportTopicDocument();
                 this.analysisContainsDowntime().subscribe(containsDownTime => {
                     if( (containsDownTime && !!this._downTime ) || !containsDownTime ) {
@@ -630,7 +630,7 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
     public goBackToAnalysis():void {
         this.updateDrillDownMode(false, null);
         if (this.analysisId=== "searchResultsAnalysis" && this.searchTerm){
-          this._router.navigate([`../../${this.analysisId}/search`], { relativeTo: this._activatedRoute, queryParamsHandling: 'merge', queryParams: {searchTerm: this.searchTerm} });
+          this._router.navigate([`../../../../${this.analysisId}/search`], { relativeTo: this._activatedRoute, queryParamsHandling: 'merge', queryParams: {searchTerm: this.searchTerm} });
         }
         else{
             if(!!this.analysisId && this.analysisId.length>0) {
