@@ -280,6 +280,14 @@ export class DetectorListAnalysisComponent extends DataRenderBaseComponent imple
                                     this.isDynamicAnalysis = true;
                                     if(this.detectorId) {
                                         this.updateDrillDownMode(true, null);
+                                        this._diagnosticService.getDetectors().subscribe(detectorList => {
+                                            if (detectorList) {
+                                                if (this.detectorId !== "") {
+                                                let currentDetector = detectorList.find(detector => detector.id == this.detectorId)
+                                                this.detectorName = currentDetector.name;
+                                                }
+                                            }
+                                        });
                                     }                                    
                                     this.showSuccessfulChecks = false;
                                     this.renderInsightsFromSearch(currDowntime);
