@@ -9,6 +9,7 @@ import { BroadcastEvent } from '../models/broadcast-event';
 export class PortalService {
     public sessionId = '';
     private portalSignature: string = 'FxFrameBlade';
+    private iFrameSignature: string = 'AppServiceDiagnosticsIFrame';
     private startupInfoObservable: ReplaySubject<StartupInfo>;
     private appInsightsResourceObservable: ReplaySubject<any>;
 
@@ -146,14 +147,13 @@ export class PortalService {
     }
 
     private iframeReceivedMsg(event: Event): void {
-
         if (!event || !event.data || event.data.signature !== this.portalSignature) {
             return;
         }
 
         const data = event.data.data;
         const methodName = event.data.kind;
-        console.log('[iFrame] Received mesg: ' + methodName, event);
+        console.log('[iFrame] Received validated mesg: ' + methodName, event);
 
         if (methodName === Verbs.sendStartupInfo) {
             const info = <StartupInfo>data;
@@ -187,10 +187,25 @@ export class PortalService {
 
     public postMessage(verb: string, data: string) {
         if (this.inIFrame()) {
+            let dataString = data;
+            try {
+                var dataJsonObject = data === null ? {} : JSON.parse(data);
+                const dataObjectWithEventType = {
+                    signature: this.iFrameSignature,
+                    eventType: verb,
+                    ...dataJsonObject,
+                }
+
+                dataString = JSON.stringify(dataObjectWithEventType);
+            }
+            catch (error) {
+                // If Json is misformatted, log json string without verb in data only.
+            }
+
             window.parent.postMessage(<Data>{
                 signature: this.portalSignature,
                 kind: verb,
-                data: data
+                data: dataString
             }, this.shellSrc);
         }
     }
