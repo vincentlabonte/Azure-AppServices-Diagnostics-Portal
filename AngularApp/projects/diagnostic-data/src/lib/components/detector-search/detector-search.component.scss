@@ -106,3 +106,15 @@
     font-weight: bold;
     margin-bottom: 5px;
 }
+
+.more-results-button{
+    position: fixed;
+    right: 20px;
+    bottom: 5px;
+    border: 1px solid #749ad4;
+    background-color: #1779de;
+    cursor: pointer;
+    z-index: 1000;
+    color: white;
+    padding: 3px 6px;
+}
