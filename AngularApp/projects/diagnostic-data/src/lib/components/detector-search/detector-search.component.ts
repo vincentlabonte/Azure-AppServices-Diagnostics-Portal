@@ -190,6 +190,23 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
         }
     }
 
+    moreResultsIconProps: any = {
+        iconName: "Down",
+        styles: {
+            root: {
+                fontSize: "13px",
+                fontWeight: 600
+            }
+        }
+    };
+
+    moreResultsButtonStyles: any = {
+        root: { height: "28px"},
+        flexContainer: {
+            flexDirection: "row-reverse"
+        }
+    };
+
     announceAlert() {
         this.showCharAlert = true;
         setTimeout(() => {this.charAlertRef.nativeElement.focus();this.charAlertRef.nativeElement.click();}, 500);
