@@ -42,6 +42,7 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
     @ViewChild ('searchInputBox', {static: false}) searchInputBox: ElementRef;
     @ViewChild ('searchResultsSection', {static: false}) searchResultsSection: ElementRef;
     detectorSearchEnabledPesIds: string[] = ["14748", "16072", "16170"];
+    detectorSearchEnabledPesIdsInternal: string[] = ["14748", "16072", "16170", "16450"];
     startTime: Moment;
     endTime: Moment;
     isPublic: boolean = false;
@@ -80,6 +81,7 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
     isListening: boolean = true;
     componentStartTime: number;
     showCharAlert: boolean = false;
+    autoFocus: boolean = false;
     
     @Input()
     withinDiagnoseAndSolve: boolean = false;
@@ -106,7 +108,7 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
         var searchConf = new SearchConfiguration(this.diagnosticData? this.diagnosticData.table: null);
         this.searchConfiguration = searchConf;
         this._resourceService.getPesId().subscribe(pesId => {
-            if (this.detectorSearchEnabledPesIds.findIndex(x => x==pesId)<0){
+            if ((this.isPublic && this.detectorSearchEnabledPesIds.findIndex(x => x==pesId)<0) || (!this.isPublic && this.detectorSearchEnabledPesIdsInternal.findIndex(x => x==pesId)<0)){
                 this.searchConfiguration.DetectorSearchEnabled = false;
             }
             this.detectorControlService.update.subscribe(isValidUpdate => {
@@ -208,18 +210,21 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
     };
 
     announceAlert() {
-        this.showCharAlert = true;
-        setTimeout(() => {this.charAlertRef.nativeElement.focus();this.charAlertRef.nativeElement.click();}, 500);
-        setTimeout(() => {
-            this.searchInputBox.nativeElement.focus();
-        }, 5000);
+        if (this.autoFocus) {
+            this.showCharAlert = true;
+            setTimeout(() => {this.charAlertRef.nativeElement.focus();this.charAlertRef.nativeElement.click();}, 500);
+            setTimeout(() => {
+                this.searchInputBox.nativeElement.focus();
+            }, 5000);
+        }
     }
     
     resetAlert() {
         this.showCharAlert = false;
     }
 
-    hitSearch(){
+    hitSearch(autofocus: boolean=false){
+        if (autofocus) {this.autoFocus = true;}
         this.resetAlert();
         if (this.searchTerm && this.searchTerm.length > 1){
             const queryParams: Params = { searchTerm: this.searchTerm };
@@ -267,7 +272,9 @@ export class DetectorSearchComponent extends DataRenderBaseComponent implements 
         }));
         this.showPreLoader = true;
         observableForkJoin([searchTask, detectorsTask, childrenTask]).subscribe(results => {
-            setTimeout(() => {this.searchResultsSection.nativeElement.click();this.searchResultsSection.nativeElement.focus();}, 2000);
+            if (this.autoFocus) {
+                setTimeout(() => {this.searchResultsSection.nativeElement.click();this.searchResultsSection.nativeElement.focus();}, 2000);
+            }
             this.showPreLoader = false;
             var searchResults: DetectorMetaData[] = results[0];
             this.logEvent(TelemetryEventNames.SearchQueryResults, { parentDetectorId: this.detector, searchId: this.searchId, query: this.searchTerm, results: JSON.stringify(searchResults.map((det: DetectorMetaData) => new Object({ id: det.id, score: det.score }))), ts: Math.floor((new Date()).getTime() / 1000).toString() });
