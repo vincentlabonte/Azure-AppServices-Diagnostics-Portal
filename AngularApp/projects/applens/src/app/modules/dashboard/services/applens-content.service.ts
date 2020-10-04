@@ -50,13 +50,11 @@ export class ApplensContentService {
         const query = encodeURIComponent(`${questionString} AND ${searchSuffix}${preferredSitesSuffix}`);
         const url = `https://api.cognitive.microsoft.com/bing/v7.0/search?q='${query}'&count=${resultsCount}`;
 
-        return this.ocpApimKeySubject.pipe(mergeMap((key: string) => {
-            return this._http.get(url, { 
+        return this._http.get(url, { 
                 headers: {
                     "Content-Type": "application/json",
                     "Ocp-Apim-Subscription-Key": this.ocpApimKey
                 }
             });
-        }));
     }
 }
