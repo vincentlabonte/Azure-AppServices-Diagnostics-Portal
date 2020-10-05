@@ -103,6 +103,27 @@ export class WebSearchComponent extends DataRenderBaseComponent implements OnIni
         return finalResults;
     }
 
+    rankResultsBySource(resultsList) {
+        if (!resultsList || resultsList.length == 0) {
+            return [];
+        }
+        var seenSources = {};
+        var part1 = [];
+        var part2 = [];
+        resultsList.forEach(item => {
+            let itemUrl = new URL(item.link);
+            let itemSource = itemUrl.hostname;
+            if (seenSources.hasOwnProperty(itemSource)) {
+                part2.push(item);
+            }
+            else {
+                part1.push(item);
+                seenSources[itemSource] = true;
+            }
+        });
+        return part1.concat(part2);
+    }
+
     triggerSearch() {
         if (!this.isChildComponent){
             const queryParams: Params = { searchTerm: this.searchTerm };
@@ -154,13 +175,13 @@ export class WebSearchComponent extends DataRenderBaseComponent implements OnIni
             this.showPreLoader = false;
             let results = this.mergeResults(resultList);
             if (results && results.webPages && results.webPages.value && results.webPages.value.length > 0) {
-                this.searchResults = results.webPages.value.map(result => {
+                this.searchResults = this.rankResultsBySource(results.webPages.value.map(result => {
                     return {
                         title: result.name,
                         description: result.snippet,
                         link: result.url
                     };
-                });
+                }));
                 this.searchResultsChange.emit(this.searchResults);
             }
             else {
@@ -179,6 +200,9 @@ export class WebSearchComponent extends DataRenderBaseComponent implements OnIni
             throw err;
         }));
         onSearch.subscribe(res => {}, (err) => {this.handleRequestFailure();});
+        searchTasks.forEach(x => {
+            x.complete();
+        });
     }
 
     selectResult(article: any) {

@@ -3,10 +3,10 @@ interface preferredSitesConfig {
 }
 
 var productPreferredSitesConfig: preferredSitesConfig = {
-    "14748": ["github.com/Azure-App-Service", "docs.microsoft.com/en-us/azure"],
-    "16072": ["github.com/Azure/Azure-Functions", "docs.microsoft.com/en-us/azure"],
-    "16170": ["azureossd.github.io", "docs.microsoft.com/en-us/azure"],
-    "16450": ["github.com/Azure/AKS", "kubernetes.io/docs", "kubernetes.io/blog"]
+    "14748": ["github.com/Azure-App-Service", "stackoverflow.com"],
+    "16072": ["github.com/Azure/Azure-Functions", "stackoverflow.com"],
+    "16170": ["azureossd.github.io", "stackoverflow.com"],
+    "16450": ["github.com/Azure/AKS", "kubernetes.io/docs", "kubernetes.io/blog", "stackoverflow.com"]
 };
 
 export class SearchConfiguration{
