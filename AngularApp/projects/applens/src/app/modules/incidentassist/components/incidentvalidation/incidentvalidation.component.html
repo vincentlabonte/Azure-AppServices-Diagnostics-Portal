@@ -6,15 +6,15 @@
             <h3 class="box-title">Incident Validation</h3>
           </div>
   
-          <form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+          <form>
             <div class="form-group">
               <div class="form-row" *ngFor="let field of fields;">
                 <div class="col-md-10">
-                    <label>{{field.fieldName}}</label>
-                    <input class="form-control" [(ngModel)]="field.fieldValue" name="fieldValue" type="text" placeholder="">
+                    <label>{{field.Name}}</label>
+                    <input class="form-control" [(ngModel)]="field.Value" name="fieldValue" type="text" placeholder="">
                 </div>
-                <div *ngIf = "!field.validationStatus" class="errorMessage" class="col-md-10">
-                    {{field.validationMessage}}
+                <div *ngIf = "!field.ValidationStatus" class="errorMessage" class="col-md-10">
+                    {{field.ValidationMessage}}
                 </div>
               </div>
             </div>
