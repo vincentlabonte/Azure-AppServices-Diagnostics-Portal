@@ -5,7 +5,7 @@ import 'rxjs/add/observable/of';
 import { HttpClient } from '@angular/common/http';
 import { mergeMap } from 'rxjs/operators';
 import { ResourceService } from '../../../shared/services/resource.service';
-import {globalExcludedSites} from "diagnostics-data";
+import {globalExcludedSites} from "diagnostic-data";
 
 @Injectable()
 export class ApplensContentService {

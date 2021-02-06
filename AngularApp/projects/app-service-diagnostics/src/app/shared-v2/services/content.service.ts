@@ -4,7 +4,7 @@ import { Observable, of, BehaviorSubject, Subject, ReplaySubject  } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ResourceService } from './resource.service';
 import { BackendCtrlService } from '../../shared/services/backend-ctrl.service';
-import {globalExcludedSites} from "diagnostics-data";
+import {globalExcludedSites} from "diagnostic-data";
 
 @Injectable()
 export class ContentService {
