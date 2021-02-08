@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppLensV3.Models;
+using System.Net.Http;
 
 namespace AppLensV3.Services
 {
@@ -12,17 +13,12 @@ namespace AppLensV3.Services
         {
             return false;
         }
-        Task<string> IIncidentAssistanceService.GetIncidentInfo(string incidentId)
+        Task<HttpResponseMessage> IIncidentAssistanceService.GetIncidentInfo(string incidentId)
         {
             return null;
         }
 
-        Task<string> IIncidentAssistanceService.ValidateIncident(string incidentId, object payload)
-        {
-            return null;
-        }
-
-        Task<string> IIncidentAssistanceService.UpdateIncident(string incidentId, object payload)
+        Task<HttpResponseMessage> IIncidentAssistanceService.ValidateAndUpdateIncident(string incidentId, object payload)
         {
             return null;
         }

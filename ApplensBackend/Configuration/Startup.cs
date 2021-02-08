@@ -70,7 +70,6 @@ namespace AppLensV3
             services.AddMvc();
 
             GraphTokenService.Instance.Initialize(Configuration);
-            //IncidentAssistanceTokenService.Instance.Initialize(Configuration);
             KustoTokenRefreshService.Instance.Initialize(Configuration);
 
             // If we are using runtime host directly

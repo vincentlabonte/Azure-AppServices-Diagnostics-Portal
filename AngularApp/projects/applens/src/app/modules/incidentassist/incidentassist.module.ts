@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
 import { FabButtonModule } from '@angular-react/fabric';
+import {IncidentAssistanceService} from "./services/incident-assistance.service";
+import { HttpClientModule } from '@angular/common/http';
 
 
 export const IncidentAssistModuleRoutes : ModuleWithProviders = RouterModule.forChild([
@@ -20,9 +22,11 @@ export const IncidentAssistModuleRoutes : ModuleWithProviders = RouterModule.for
     CommonModule,
     IncidentAssistModuleRoutes,
     SharedModule,
+    HttpClientModule,
     FormsModule,
     FabButtonModule
   ],
+  providers: [IncidentAssistanceService],
   declarations: [IncidentValidationComponent]
 })
 export class IncidentAssistModule { }
