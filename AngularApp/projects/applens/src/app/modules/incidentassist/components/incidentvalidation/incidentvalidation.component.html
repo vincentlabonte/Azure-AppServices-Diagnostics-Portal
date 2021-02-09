@@ -1,39 +1,46 @@
-<div class="container-fluid main-container">
+<div class="main-container">
+    <div class="top-banner">
+      <div class="banner-text"><span style="color:#ffb353;">App</span>Lens Incident Assistance</div>
+    </div>
     <div class="row main-row">
-      <div class="col-md-10">
-        <div class="box box-primary" *ngIf="!pageLoading">
+      <div>
+        <div class="card-box" *ngIf="!pageLoading">
           <div class="box-header with-border">
             <h3 class="box-title">Incident <a href="{{'https://portal.microsofticm.com/imp/v3/incidents/details/' + incidentInfo.incidentId + '/home'}}" target="_blank">{{incidentInfo.incidentId}}</a> &nbsp; {{incidentInfo.title}}</h3>
           </div>
   
           <div>
-            <div class="form-group" *ngFor="let field of incidentInfo.validationResults;">
-              <div class="form-row">
-                <div>
-                  <div class="col-md-12">
+            <div class="form-group">
+              <div class="form-row" *ngFor="let field of incidentInfo.validationResults;">
+                  <div class="col-md-12 field-box">
                       <label>{{field.name}}</label>
                       <div style="display:block;">
                         <input class="form-control input-box" [(ngModel)]="field.value" (ngModelChange)="refreshButtonStatus()" name="fieldValue" type="text" placeholder="">
                         <i class="fa fa-check-circle pass-icon" *ngIf="field.validationStatus"></i>
                       </div>
+                      <div *ngIf = "(!field.validationStatus)&&(field.value==field.oldValue)" class="error-message col-md-12" style="padding-left: 0px;">
+                        {{field.validationMessage}}
+                      </div>
                   </div>
-                  <div *ngIf = "(!field.validationStatus)&&(field.value==field.oldValue)" class="error-message col-md-12">
-                      {{field.validationMessage}}
-                  </div>
-                </div>
               </div>
             </div>
             <div class="form-group go-form">
               <fab-primary-button contentStyle="margin-top: 20px;"
-                  type="Submit" text='Check Validation' (click)="onSubmit()" [disabled]="buttonDisabled">
+                  type="Submit" text='Check Validation' (click)="onSubmit()" [disabled]="validationButtonDisabled">
+              </fab-primary-button>
+              <fab-primary-button contentStyle="margin-top: 20px; margin-left: 10px;"
+                  type="Submit" text='Update Incident' (click)="onUpdateClick()" [disabled]="updateButtonDisabled">
               </fab-primary-button>
             </div>
           </div>
-          <div *ngIf="validationUpdateResponse&&validationUpdateResponse.validationStatus" class="success-message">
-              All validations have passed and the incident has been updated.
+          <div *ngIf="incidentValidationStatus" class="success-message">
+              All validations have passed.
           </div>
-          <div *ngIf="validationUpdateResponse&&!validationUpdateResponse.validationStatus" class="failed-message">
-              Some validations have failed, please try again.
+          <div *ngIf="!incidentValidationStatus" class="failed-message">
+              Some validations have failed.
+          </div>
+          <div *ngIf="updatedSuccessfully" class="success-message">
+              Incident has been updated successfully.
           </div>
         </div>
       </div>

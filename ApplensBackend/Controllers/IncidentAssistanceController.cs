@@ -48,7 +48,7 @@ namespace AppLensV3.Controllers
 
         [HttpPost("validateAndUpdateIncident")]
         [HttpOptions("validateAndUpdateIncident")]
-        public async Task<IActionResult> ValidateAndUpdateIncident([FromBody] JToken body)
+        public async Task<IActionResult> ValidateAndUpdateIncident([FromBody] JToken body, string update)
         {
             string incidentId = null;
             if (body != null && body["IncidentId"] != null)
@@ -60,7 +60,7 @@ namespace AppLensV3.Controllers
                 return BadRequest("IncidentId cannot be empty");
             }
 
-            var response = await _incidentAssistanceService.ValidateAndUpdateIncident(incidentId, body);
+            var response = await _incidentAssistanceService.ValidateAndUpdateIncident(incidentId, body, update);
             var res = response.Content.ReadAsStringAsync();
             return Ok(res);
         }

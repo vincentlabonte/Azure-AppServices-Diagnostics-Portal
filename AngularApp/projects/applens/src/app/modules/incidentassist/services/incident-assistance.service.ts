@@ -35,8 +35,17 @@ export class IncidentAssistanceService {
     return request;
   }
 
-  public validateAndUpdateIncident(body: any): Observable<any> {
+  public validateIncident(body: any): Observable<any> {
     let url = `${this.diagnosticApi}api/icm/validateAndUpdateIncident`;
+    let request = this._httpClient.post<HttpResponse<Object>>(url, body, {
+      headers: this._getHeaders(),
+      observe: 'response'
+    });
+    return request;
+  }
+
+  public updateIncident(body: any): Observable<any> {
+    let url = `${this.diagnosticApi}api/icm/validateAndUpdateIncident?update=true`;
     let request = this._httpClient.post<HttpResponse<Object>>(url, body, {
       headers: this._getHeaders(),
       observe: 'response'

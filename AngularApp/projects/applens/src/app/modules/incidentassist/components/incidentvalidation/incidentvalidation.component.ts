@@ -13,8 +13,10 @@ export class IncidentValidationComponent implements OnInit {
   isEnabled: boolean = false;
   incidentId: string = null;
   incidentInfo: IncidentInfo;
-  buttonDisabled: boolean = true;
-  validationUpdateResponse: ValidationUpdateResponse;
+  validationButtonDisabled: boolean = true;
+  updateButtonDisabled: boolean = true;
+  updatedSuccessfully: boolean = false;
+  incidentValidationStatus: boolean = false;
 
   constructor(private _incidentAssistanceService: IncidentAssistanceService, private _route: ActivatedRoute, private _router: Router) {}
 
@@ -39,7 +41,8 @@ export class IncidentValidationComponent implements OnInit {
   }
 
   refreshButtonStatus() {
-    this.buttonDisabled = this.incidentInfo.validationResults.every(x => x.value==x.oldValue);
+    this.validationButtonDisabled = this.incidentValidationStatus || this.incidentInfo.validationResults.every(x => x.value==x.oldValue);
+    this.updateButtonDisabled = !this.incidentValidationStatus || this.updatedSuccessfully;
   }
 
   setIncidentInfo(payload){
@@ -52,31 +55,47 @@ export class IncidentValidationComponent implements OnInit {
   getIncidentData() {
     this._incidentAssistanceService.getIncident(this.incidentId).subscribe(res => {
       var result = JSON.parse(res.body.result);
-      this.setIncidentInfo(result);
-      console.log("IncidentInfo", this.incidentInfo);
       this.pageLoading = false;
+      this.setIncidentInfo(result);
+      this.incidentValidationStatus = result.validationResults.every(x => x.validationStatus);
+      console.log("IncidentInfo", this.incidentInfo);
     });
   }
 
   onSubmit() {
-    console.log(this.incidentInfo);
     var body = {
       "IncidentId": this.incidentInfo.incidentId,
       "ValidationResults": this.incidentInfo.validationResults.map(x => {return {Name: x.name, Value: x.value};})
     };
-    this._incidentAssistanceService.validateAndUpdateIncident(body).subscribe(res => {
-      console.log("Validation update response1", res);
+    this._incidentAssistanceService.validateIncident(body).subscribe(res => {
       var result = JSON.parse(res.body.result);
       if (result.validationStatus) {
-        this.validationUpdateResponse = result;
-        this.incidentInfo.validationResults.forEach(x => {x.validationStatus=true;});
-      }
-      else {
+        this.incidentValidationStatus = true;
         this.setIncidentInfo(result);
         this.refreshButtonStatus();
-        this.validationUpdateResponse = result;
       }
-      console.log("Validation update response", this.validationUpdateResponse);
+      else {
+        this.incidentValidationStatus = false;
+        this.setIncidentInfo(result);
+        this.refreshButtonStatus();
+      }
+    });
+  }
+
+  onUpdateClick() {
+    var body = {
+      "IncidentId": this.incidentInfo.incidentId,
+      "ValidationResults": this.incidentInfo.validationResults.map(x => {return {Name: x.name, Value: x.value};})
+    };
+    this._incidentAssistanceService.updateIncident(body).subscribe(res => {
+      var result = JSON.parse(res.body.result);
+      if (result.updationStatus) {
+        this.updatedSuccessfully = true;
+      }
+      else {
+        this.updatedSuccessfully = false;
+        //SHOW UPDATION ERROR MESSAGE
+      }
     });
   }
 }
@@ -97,6 +116,7 @@ interface ValidationResult{
 
 interface ValidationUpdateResponse extends IncidentInfo{
   validationStatus: boolean;
+  updationStatus: boolean;
   errorMessage: string;
   successMessage: string;
 }

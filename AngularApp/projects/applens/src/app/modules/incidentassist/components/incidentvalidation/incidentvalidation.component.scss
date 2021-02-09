@@ -3,9 +3,19 @@
     height: 100vh;
 }
 
+.top-banner{
+    background-image: linear-gradient(#4fb0e8 0,#3c8dbc 70%);
+    height: 40px;
+}
+
+.banner-text{
+    color: white;
+    padding: 5px 10px;
+    font-size: 22px;
+}
+
 .main-row {
     padding-top: 50px;
-    padding-left: 50px;
 }
 
 .go-form {
@@ -16,6 +26,15 @@
 .go-button {
     width: 50px;
     margin-top: 10px;
+}
+
+.card-box{  
+    padding: 20px;  
+    width: 50%;
+    margin: 0 auto;
+    border: 2px solid #d1d1da;
+    box-shadow: 10px 5px 14px #e4e4e4;
+    background-color: white;
 }
 
 .error-message{
@@ -35,9 +54,14 @@
     margin: 15px;
 }
 
+.field-box{
+    padding-bottom: 30px;
+}
+
 .input-box{
     width: 95%;
     display: inline-block;
+    border-radius: 5px;
 }
 
 .pass-icon{

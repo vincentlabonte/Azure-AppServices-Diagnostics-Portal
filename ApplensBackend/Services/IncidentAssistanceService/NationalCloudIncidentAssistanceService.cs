@@ -18,7 +18,7 @@ namespace AppLensV3.Services
             return null;
         }
 
-        Task<HttpResponseMessage> IIncidentAssistanceService.ValidateAndUpdateIncident(string incidentId, object payload)
+        Task<HttpResponseMessage> IIncidentAssistanceService.ValidateAndUpdateIncident(string incidentId, object payload, string update)
         {
             return null;
         }

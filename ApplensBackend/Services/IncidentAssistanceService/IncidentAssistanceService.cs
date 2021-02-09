@@ -19,7 +19,7 @@ namespace AppLensV3.Services
     {
         Task<bool> IsEnabled();
         Task<HttpResponseMessage> GetIncidentInfo(string incidentId);
-        Task<HttpResponseMessage> ValidateAndUpdateIncident(string incidentId, object payload);
+        Task<HttpResponseMessage> ValidateAndUpdateIncident(string incidentId, object payload, string update);
     }
 
     public class IncidentAssistanceService : IIncidentAssistanceService
@@ -70,14 +70,14 @@ namespace AppLensV3.Services
             return await _httpClient.SendAsync(request);
         }
 
-        public async Task<HttpResponseMessage> ValidateAndUpdateIncident(string incidentId, object payload)
+        public async Task<HttpResponseMessage> ValidateAndUpdateIncident(string incidentId, object payload, string update)
         {
             if (string.IsNullOrWhiteSpace(incidentId))
             {
                 throw new ArgumentException("incidentId");
             }
             
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"{IncidentAssistEndpoint}/api/ValidateAndUpdateICM?code={ApiKey}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, $"{IncidentAssistEndpoint}/api/ValidateAndUpdateICM?code={ApiKey}&update={update}");
             request.Content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
             return await _httpClient.SendAsync(request);
         }
