@@ -9,8 +9,8 @@
             <h3 class="box-title">Incident <a href="{{'https://portal.microsofticm.com/imp/v3/incidents/details/' + incidentInfo.incidentId + '/home'}}" target="_blank">{{incidentInfo.incidentId}}</a> &nbsp; {{incidentInfo.title}}</h3>
           </div>
   
-          <div>
-            <div class="form-group">
+          <div style="height: calc(100% - 50px);">
+            <div class="form-group form-content">
               <div class="form-row" *ngFor="let field of incidentInfo.validationResults;">
                   <div class="col-md-12 field-box">
                       <label>{{field.name}}</label>
@@ -33,14 +33,8 @@
               </fab-primary-button>
             </div>
           </div>
-          <div *ngIf="incidentValidationStatus" class="success-message">
-              All validations have passed.
-          </div>
-          <div *ngIf="!incidentValidationStatus" class="failed-message">
-              Some validations have failed.
-          </div>
-          <div *ngIf="updatedSuccessfully" class="success-message">
-              Incident has been updated successfully.
+          <div *ngIf="footerMessage!=null" [class.success-message]="footerMessageType=='success'" [class.failed-message]="footerMessageType=='error'">
+              {{footerMessage}}
           </div>
         </div>
       </div>

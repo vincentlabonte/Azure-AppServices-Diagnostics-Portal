@@ -17,6 +17,8 @@ export class IncidentValidationComponent implements OnInit {
   updateButtonDisabled: boolean = true;
   updatedSuccessfully: boolean = false;
   incidentValidationStatus: boolean = false;
+  footerMessage: string = null;
+  footerMessageType: string = "none";
 
   constructor(private _incidentAssistanceService: IncidentAssistanceService, private _route: ActivatedRoute, private _router: Router) {}
 
@@ -46,9 +48,11 @@ export class IncidentValidationComponent implements OnInit {
   }
 
   setIncidentInfo(payload){
-    payload.validationResults.forEach(x => {
-      x["oldValue"] = x.value;
-    });
+    if (payload && payload.validationResults && payload.validationResults.length>0){
+      payload.validationResults.forEach(x => {
+        x["oldValue"] = x.value;
+      });
+    }
     this.incidentInfo = payload;
   }
 
@@ -58,6 +62,10 @@ export class IncidentValidationComponent implements OnInit {
       this.pageLoading = false;
       this.setIncidentInfo(result);
       this.incidentValidationStatus = result.validationResults.every(x => x.validationStatus);
+      if (!this.incidentValidationStatus){
+        this.footerMessage = "Some validations have failed. Please correct the info and click on 'Check Validation' button.";
+        this.footerMessageType = "error";
+      }
       console.log("IncidentInfo", this.incidentInfo);
     });
   }
@@ -71,11 +79,15 @@ export class IncidentValidationComponent implements OnInit {
       var result = JSON.parse(res.body.result);
       if (result.validationStatus) {
         this.incidentValidationStatus = true;
-        this.setIncidentInfo(result);
+        this.footerMessage = "All validations have passed.";
+        this.footerMessageType = "success";
+        this.incidentInfo.validationResults.forEach(x => {x.validationStatus = true; x.oldValue = x.value;});
         this.refreshButtonStatus();
       }
       else {
         this.incidentValidationStatus = false;
+        this.footerMessage = "Some validations have failed. Please try again.";
+        this.footerMessageType = "error";
         this.setIncidentInfo(result);
         this.refreshButtonStatus();
       }
@@ -91,9 +103,14 @@ export class IncidentValidationComponent implements OnInit {
       var result = JSON.parse(res.body.result);
       if (result.updationStatus) {
         this.updatedSuccessfully = true;
+        this.updateButtonDisabled = true;
+        this.footerMessage = "Incident has been updated successfully and will be investigated by the team."
+        this.footerMessageType = "success";
       }
       else {
         this.updatedSuccessfully = false;
+        this.footerMessage = "Incident updation has failed. Please try again.";
+        this.footerMessageType = "error";
         //SHOW UPDATION ERROR MESSAGE
       }
     });

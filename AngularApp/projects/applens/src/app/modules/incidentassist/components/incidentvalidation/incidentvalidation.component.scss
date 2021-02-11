@@ -14,6 +14,17 @@
     font-size: 22px;
 }
 
+.box-header{
+    height: 40px;
+}
+
+.box-title{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .main-row {
     padding-top: 50px;
 }
@@ -21,6 +32,12 @@
 .go-form {
     padding: 1em;
     text-align: right;
+    height: 50px;
+}
+
+.form-content{
+    height: calc(100% - 100px);
+    overflow-y: auto;
 }
 
 .go-button {
@@ -31,11 +48,21 @@
 .card-box{  
     padding: 20px;  
     width: 50%;
+    height: calc(100vh - 100px);
     margin: 0 auto;
     border: 2px solid #d1d1da;
     box-shadow: 10px 5px 14px #e4e4e4;
     background-color: white;
 }
+
+*::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: grey;
+    border-radius: 20px;
+  }
 
 .error-message{
     white-space: pre-wrap;
@@ -46,12 +73,12 @@
 
 .success-message{
     color: green;
-    margin: 15px
+    margin: 0px 15px;
 }
 
 .failed-message{
     color: red;
-    margin: 15px;
+    margin: 0px 15px;
 }
 
 .field-box{
