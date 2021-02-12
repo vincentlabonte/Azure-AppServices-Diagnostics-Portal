@@ -75,7 +75,7 @@ export const TelemetryEventNames = {
     RiskTileClicked: 'RiskTileClicked',
     RiskTileLoaded: 'RiskTileLoaded',
     ArmConfigMergeError: 'ArmConfigMergeError',
-    OpenRiskAlertPanel: 'openRiskAlertsPanel'
+    OpenRiskAlertPanel: 'openRiskAlertsPanel',
     IncidentAssistancePage: 'IncidentAssistancePage',
     IncidentAssistanceLoaded: 'IncidentAssistanceLoaded',
     IncidentValidationCheck: 'IncidentValidationCheck',
