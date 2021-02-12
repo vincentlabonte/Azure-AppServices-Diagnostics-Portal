@@ -75,6 +75,7 @@ export const TelemetryEventNames = {
     RiskTileClicked: 'RiskTileClicked',
     RiskTileLoaded: 'RiskTileLoaded',
     ArmConfigMergeError: 'ArmConfigMergeError',
+    OpenRiskAlertPanel: 'openRiskAlertsPanel'
     IncidentAssistancePage: 'IncidentAssistancePage',
     IncidentAssistanceLoaded: 'IncidentAssistanceLoaded',
     IncidentValidationCheck: 'IncidentValidationCheck',
@@ -83,7 +84,8 @@ export const TelemetryEventNames = {
 
 export const TelemetrySource = {
     LandingPage: 'LandingPage',
-    CategoryPage: 'CategoryPage'
+    CategoryPage: 'CategoryPage',
+    CaseSubmissionFlow: 'CaseSubmissionFlow'
 }
 
 export interface TelemetryPayload {
