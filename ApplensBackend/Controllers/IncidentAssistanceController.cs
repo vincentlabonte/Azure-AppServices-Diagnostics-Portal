@@ -42,8 +42,8 @@ namespace AppLensV3.Controllers
             }
 
             var response = await _incidentAssistanceService.GetIncidentInfo(incidentId);
-            var res = response.Content.ReadAsStringAsync();
-            return Ok(res);
+            var responseTask = response.Content.ReadAsStringAsync();
+            return StatusCode((int)response.StatusCode, await responseTask);
         }
 
         [HttpPost("validateAndUpdateIncident")]
@@ -61,8 +61,8 @@ namespace AppLensV3.Controllers
             }
 
             var response = await _incidentAssistanceService.ValidateAndUpdateIncident(incidentId, body, update);
-            var res = response.Content.ReadAsStringAsync();
-            return Ok(res);
+            var responseTask = response.Content.ReadAsStringAsync();
+            return StatusCode((int)response.StatusCode, await responseTask);
         }
     }
 }

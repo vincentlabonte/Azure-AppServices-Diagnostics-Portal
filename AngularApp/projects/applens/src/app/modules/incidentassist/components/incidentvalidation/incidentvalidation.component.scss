@@ -26,17 +26,19 @@
 }
 
 .main-row {
-    padding-top: 50px;
+    padding-top: 30px;
 }
 
 .go-form {
     padding: 1em;
     text-align: right;
     height: 50px;
+    padding-top: 0px;
+    margin-top: -20px;
 }
 
 .form-content{
-    height: calc(100% - 100px);
+    max-height: calc(100% - 100px);
     overflow-y: auto;
 }
 
@@ -45,10 +47,25 @@
     margin-top: 10px;
 }
 
+.loader-block{
+    z-index: 100;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    position: absolute;
+    opacity: 0.2;
+    background-color: grey;
+    text-align: center;
+}
+
+.loader-icon{
+    font-size: 10em;top: 36vh;position: relative;color: #0a0a0a;
+}
+
 .card-box{  
     padding: 20px;  
     width: 50%;
-    height: calc(100vh - 100px);
+    max-height: calc(100vh - 80px);
     margin: 0 auto;
     border: 2px solid #d1d1da;
     box-shadow: 10px 5px 14px #e4e4e4;

@@ -75,6 +75,10 @@ export const TelemetryEventNames = {
     RiskTileClicked: 'RiskTileClicked',
     RiskTileLoaded: 'RiskTileLoaded',
     ArmConfigMergeError: 'ArmConfigMergeError',
+    IncidentAssistancePage: 'IncidentAssistancePage',
+    IncidentAssistanceLoaded: 'IncidentAssistanceLoaded',
+    IncidentValidationCheck: 'IncidentValidationCheck',
+    IncidentUpdateOperation: 'IncidentUpdateOperation'
 };
 
 export const TelemetrySource = {
