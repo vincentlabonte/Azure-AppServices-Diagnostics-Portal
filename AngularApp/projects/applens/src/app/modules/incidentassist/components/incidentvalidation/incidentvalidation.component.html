@@ -2,13 +2,13 @@
     <div class="top-banner">
       <div class="banner-text"><span style="color:#ffb353;">App</span>Lens Incident Assistance</div>
     </div>
-    <div *ngIf="alternateContent!=null" class="row main-row">
+    <div *ngIf="alternateContent!=null" class="row main-row" style="margin-left:25px;">
       {{alternateContent}}
     </div>
-    <div class="row main-row">
+    <div *ngIf="!alternateContent" class="row main-row">
       <div>
         <div *ngIf="displayLoader" class="loader-block">
-          <i class="fa fa-circle-o-notch fa-spin loader-icon"></i>
+          <i class="fa fa-spinner fa-spin loader-icon"></i>
         </div>
         <div class="card-box" *ngIf="!pageLoading">
           <div class="box-header with-border">

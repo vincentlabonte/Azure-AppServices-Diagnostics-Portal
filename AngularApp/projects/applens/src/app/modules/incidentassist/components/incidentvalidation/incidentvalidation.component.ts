@@ -38,7 +38,7 @@ export class IncidentValidationComponent implements OnInit {
           this.getIncidentData();
         }
         else{
-          this._telemetryService.logEvent(TelemetryService.IncidentAssistancePage, {IsEnabled: this.isEnabled});
+          this._telemetryService.logEvent(TelemetryEventNames.IncidentAssistancePage, {"IsEnabled": this.isEnabled.toString()});
           this.alternateContent = "Incident assistance feature is currently disabled in AppLens";
           this.pageLoading = false;
         }
@@ -73,7 +73,7 @@ export class IncidentValidationComponent implements OnInit {
       this.pageLoading = false;
       this.setIncidentInfo(result);
       this.incidentValidationStatus = result.validationResults.every(x => x.validationStatus);
-      this._telemetryService.logEvent(TelemetryEventNames.IncidentAssistanceLoaded, {IncidentId: this.incidentInfo.incidentId, ValidationStatus: this.incidentValidationStatus});
+      this._telemetryService.logEvent(TelemetryEventNames.IncidentAssistanceLoaded, {"IncidentId": this.incidentInfo.incidentId, "ValidationStatus": this.incidentValidationStatus.toString()});
       if (!this.incidentValidationStatus){
         this.footerMessage = "Some validations have failed. Please correct the info and click on 'Check Validation' button.";
         this.footerMessageType = "error";
@@ -81,7 +81,7 @@ export class IncidentValidationComponent implements OnInit {
     },
     (err) => {
       this.displayLoader = false;
-      this.alternateContent = `Failed to load incident information because of ${err.message}`;
+      this.alternateContent = `Failed to load incident information. ${err.error}`;
     });
   }
 
@@ -106,12 +106,12 @@ export class IncidentValidationComponent implements OnInit {
         else {
           this.onValidationFailed(result);
         }
-        this._telemetryService.logEvent(TelemetryEventNames.IncidentValidationCheck, {IncidentId: this.incidentInfo.incidentId, ValidationStatus: this.incidentValidationStatus, Status: "success"});
+        this._telemetryService.logEvent(TelemetryEventNames.IncidentValidationCheck, {"IncidentId": this.incidentInfo.incidentId, "ValidationStatus": this.incidentValidationStatus.toString(), "Status": "success"});
       },
       (err) => {
         this.displayLoader = false;
-        this._telemetryService.logEvent(TelemetryEventNames.IncidentValidationCheck, {IncidentId: this.incidentInfo.incidentId, Status: "failed", ErrorMessage: err.message});
-        this.footerMessage = `Failed to validate incident because of ${err.message}`;
+        this._telemetryService.logEvent(TelemetryEventNames.IncidentValidationCheck, {"IncidentId": this.incidentInfo.incidentId, "Status": "failed", "ErrorMessage": err.error});
+        this.footerMessage = `Failed to validate incident. ${err.error}`;
         this.footerMessageType = "error";
       });
     }
@@ -137,19 +137,19 @@ export class IncidentValidationComponent implements OnInit {
         else {
           this.updatedSuccessfully = false;
           if (result.validationStatus) {
-            this.footerMessage = "Incident updation has failed. Please try again.";
+            this.footerMessage = `Incident updation has failed. ${result.errorMessage}`;
             this.footerMessageType = "error";
           }
           else {
             this.onValidationFailed({incidentId: result.incidentId, title: result.title, validationResults: result.validationResults});
           }
         }
-        this._telemetryService.logEvent(TelemetryEventNames.IncidentValidationCheck, {IncidentId: this.incidentInfo.incidentId, UpdationStatus: this.updatedSuccessfully, Status: "success"});
+        this._telemetryService.logEvent(TelemetryEventNames.IncidentValidationCheck, {"IncidentId": this.incidentInfo.incidentId, "UpdationStatus": this.updatedSuccessfully.toString(), "Status": "success"});
       },
       (err) => {
         this.displayLoader = false;
-        this._telemetryService.logEvent(TelemetryEventNames.IncidentValidationCheck, {IncidentId: this.incidentInfo.incidentId, Status: "failed", ErrorMessage: err.message});
-        this.footerMessage = `Failed to update incident because of ${err.message}`;
+        this._telemetryService.logEvent(TelemetryEventNames.IncidentValidationCheck, {"IncidentId": this.incidentInfo.incidentId, "Status": "failed", "ErrorMessage": err.error});
+        this.footerMessage = `Failed to update incident because of ${err.error}`;
         this.footerMessageType = "error";
       });
     }
