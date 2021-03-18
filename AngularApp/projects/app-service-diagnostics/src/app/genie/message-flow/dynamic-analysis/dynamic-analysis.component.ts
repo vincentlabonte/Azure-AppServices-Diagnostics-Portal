@@ -63,7 +63,7 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
                 });
                 this._telemetryService.logEvent(TelemetryEventNames.WebQueryResults, {
                     searchId: this.webSearchId,
-                    searchMode: SearchAnalysisMode.Genie.tostring(),
+                    searchMode: this.searchMode,
                     query: this.keyword,
                     results: JSON.stringify(this.content),
                     ts: Math.floor((new Date()).getTime() / 1000).toString()
@@ -79,7 +79,7 @@ export class DynamicAnalysisComponent implements OnInit, AfterViewInit, IChatMes
 
 
     openArticle(article: any) {
-        this._telemetryService.logEvent(TelemetryEventNames.WebQueryResultClicked, { searchId: this.webSearchId, searchMode: SearchAnalysisMode.Genie.tostring(), article: JSON.stringify(article), ts: Math.floor((new Date()).getTime() / 1000).toString() });
+        this._telemetryService.logEvent(TelemetryEventNames.WebQueryResultClicked, { searchId: this.webSearchId, searchMode: this.searchMode, article: JSON.stringify(article), ts: Math.floor((new Date()).getTime() / 1000).toString() });
         window.open(article.link, '_blank');
     }
 
